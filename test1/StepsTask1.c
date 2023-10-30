@@ -57,7 +57,7 @@ int main() {
     char line_buffer[buffer_size];
 
 //create temp storage for and change steps to characters for now
-    char date [11];
+    char date[11];
     char time[6];
     char steps[6];
 
@@ -73,13 +73,13 @@ while (fgets(line_buffer, buffer_size, file) !=NULL) {
     lines++;
 }
 //print number of lines in the file
-printf("Number of records in file: %d \n", lines);
+printf("Number of records in file: %d\n", lines);
 
 //print the first 3 records in the file using for loop
-for(lines = 0; lines < 3; lines++)
+for (int i = 0; i < 3 && i < lines; i++)
 //choose the fields you want to print 
     {
-    printf("%s/%s/%d\n", record[lines].date, record[lines].time, record[lines].steps);
+    printf("%s/%s/%d\n", record[i].date, record[i].time, record[i].steps);
     }
 
 //if no error, close file and return success
