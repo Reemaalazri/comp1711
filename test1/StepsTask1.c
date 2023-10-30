@@ -42,27 +42,46 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    FILE *file = fopen ("FitnessData_2023.csv", "r"); 
-    if (file == NULL) { //error check
+//open the file and read it
+    FILE *file = fopen ("FitnessData_2023.csv", "r");
+//error check
+    if (file == NULL) {
         perror("");
         return 1;
     }
 
-    // FITNESS_DATA record [1000];
+//create an array of 100 FITNESS_DATA records
+    FITNESS_DATA record [100];
+    int lines = 0;
+    int buffer_size = 100; //size of file (lines)
+    char line_buffer[buffer_size];
 
-    // int buffer_size = 100; //size of file (lines)
-    // char line_buffer[buffer_size];
-    // char date [11], char time[6],int steps;
-    // while (fgets(line_buffer, buffer_size, file) !=NULL) { //read each line, when no more lines to read it exits the loop
-    //     printf("%s\n", line_buffer); //
-    // }
+//create temp storage for and change steps to characters for now
+    char date [11];
+    char time[6];
+    char steps[6];
 
+//get data form the file and read each line, until  no more lines to read it then it exits the loop
+while (fgets(line_buffer, buffer_size, file) !=NULL) {
+//take all the records and list them uniquely
+    tokeniseRecord(line_buffer, "," , date, time, steps);
+//copies the string pointed and print it
+    strcpy(record[lines].date, date);
+    strcpy(record[lines].time, time);
+    record[lines].steps = atoi(steps);
+//print all lines until end
+    lines++;
+}
+//print number of lines in the file
+printf("Number of records in file: %d \n", lines);
 
+//print the first 3 records in the file using for loop
+for(lines = 0; lines < 3; lines++)
+//choose the fields you want to print 
+    {
+    printf("%s/%s/%d\n", record[lines].date, record[lines].time, record[lines].steps);
+    }
 
-    // tokeniseRecord(fitness, "," , date, time, steps);
-
-
-//fprintf writes in file
 //if no error, close file and return success
     fclose(file);
     return 0;
