@@ -49,35 +49,40 @@ int main() {
         perror("");
         return 1;
     }
-
+//with the help of the codes taken in class
 //create an array of 100 FITNESS_DATA records
     FITNESS_DATA record [100];
-    int lines = 0;
-    int buffer_size = 100; //size of file (lines)
-    char line_buffer[buffer_size];
+//keep track of how many times a code is executed
+//store index position
+    int counter = 0;
+    int bufferLength = 100; //size of file (lines)
+    char bufferLine[bufferLength];
 
-//create temp storage for and change steps to characters for now
+//create temp storage for the fields and change them to char for now
+//store each one in the correct format requested like YYYY-MM-DD  for date and HH:mm for time and steps is numbers of int
     char date[11];
     char time[6];
     char steps[6];
 
-//get data form the file and read each line, until  no more lines to read it then it exits the loop
-while (fgets(line_buffer, buffer_size, file) !=NULL) {
+//get data form the file and read each line, until  no more lines to read then it exits the loop
+while (fgets(bufferLine, bufferLength, file) !=NULL) {
 //take all the records and list them uniquely
-    tokeniseRecord(line_buffer, "," , date, time, steps);
+    tokeniseRecord(bufferLine, "," , date, time, steps);
 //copies the string pointed and print it
-    strcpy(record[lines].date, date);
-    strcpy(record[lines].time, time);
-    record[lines].steps = atoi(steps);
-//print all lines until end
-    lines++;
+    strcpy(record[counter].date, date);
+    strcpy(record[counter].time, time);
+//change string into integer representation
+    record[counter].steps = atoi(steps);
+//all lines until end
+    counter++;
 }
 //print number of lines in the file
-printf("Number of records in file: %d\n", lines);
+printf("Number of records in file: %d\n", counter);
 
 //print the first 3 records in the file using for loop
-for (int i = 0; i < 3 && i < lines; i++)
-//choose the fields you want to print 
+//got little help form ChatGBT
+for (int i = 0; i < 3 && i < counter; i++)
+//choose the fields you specified before to print
     {
     printf("%s/%s/%d\n", record[i].date, record[i].time, record[i].steps);
     }
