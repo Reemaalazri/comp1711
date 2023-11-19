@@ -183,6 +183,11 @@ int main() {
         
         case 'C':
         case 'c':
+        //calculate for fewest steps
+            //int min = INT_
+            //for(int i = 0; i < num_records; i++)
+            //if min>
+            //if(record[i].date[0]=='\0' || record[i].time[0]=='\0' || record[i].steps == 0)
             return 0;
             break;
 
@@ -193,7 +198,14 @@ int main() {
 
         case 'E':
         case 'e':
-            return 0;
+            mean = 0;
+            for (int i = 0; i < counter; i++)
+            {
+                mean += record[i].steps;
+            }
+            mean /= counter;
+            printf("Mean step count: %f\n", mean);
+            //change float to decimal
             break;
 
         case 'F':
