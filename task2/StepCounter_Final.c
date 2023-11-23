@@ -60,58 +60,29 @@ int main() {
     char bufferLine[bufferLength];
     //char line[buffer_size];
     char filename[bufferLength];
-    int num_records = counter;
-
-    //char buffer_size = 0;
-
-    // get filename from the user
-    //printf("Input filename: ");
-
-    // these lines read in a line from the stdin (where the user types)
-    // and then takes the actual string out of it
-    // this removes any spaces or newlines.
-    //fgets(bufferLine, bufferLength, stdin);
-    //sscanf(bufferLine, " %s ", filename);
-//read it outside while loop, open it read it save it all once at beginning
-    //FILE *input = fopen(filename, "r");
-    //    if (!input)
-    //    {
-    //        printf("Error: Could not find or open the file.\n");
-    //        return 1;
-    //    } //error if file not found
-
+    //int num_records = counter;
+    int min,max,i;
+    int row = 0;
+    int col=0;
+    int currentLength = 0;
+    int maxLength = 0;
+    int first = -1;
+    int longestStart = -1;   
     //fclose(input);
 
     char date[11];
     char time[6];
-    char steps[6];
+    char steps[8];
 
-//while (fgets(bufferLine, bufferLength, input) !=NULL) {
-//take all the records and list them uniquely
-//    tokeniseRecord(bufferLine, "," , date, time, steps);
-//copies the string pointed and print it
-//    strcpy(record[counter].date, date);
-//    strcpy(record[counter].time, time);
-//change string into integer representation
-//    record[counter].steps = atoi(steps);
-//all lines until end
-//   counter++;
-//}
-//while (fgets(bufferLine, bufferLength, input))
-  //  {
-    // split up the line and store it in the right place
-    // using the & operator to pass in a pointer to the bloodIron so it stores it
-    //tokeniseRecord(bufferLine, ",", record[counter].date, record[counter].time, record[counter].steps);
-    //strcpy(record[counter].date, date);
-    //strcpy(record[counter].time, time);
-    //record[counter].steps = atoi(steps);
-    //mean += daily_readings[counter].bloodIron;
-    //counter++;
-    //}
-//print number of lines in the file
-//printf("Number of records in file: %d\n", counter);
+    while (fgets(bufferLine, bufferLength, file) !=NULL) {
+        tokeniseRecord(bufferLine, "," , date, time, steps);
+        strcpy(record[counter].date, date);
+        strcpy(record[counter].time, time);
+        record[counter].steps = atoi(steps);
+        counter++;}
 
-//it goes forever
+        
+//it runs forever
     while (1)
     {
         printf("Menu Options:\n");
@@ -140,7 +111,7 @@ int main() {
         case 'A':
         case 'a':
 
-            printf("Input filename:");
+            printf("Input filename: ");
 
             fgets(bufferLine, bufferLength, stdin);
             sscanf(bufferLine, " %s ", filename);
@@ -153,29 +124,21 @@ int main() {
                 }
                 else
                 {
-
-                    while (fgets(bufferLine, bufferLength, input) !=NULL) {
-                    tokeniseRecord(bufferLine, "," , date, time, steps);
-                    strcpy(record[counter].date, date);
-                    strcpy(record[counter].time, time);
-                    record[counter].steps = atoi(steps);
-                    counter++;}
                     printf("File successfully loaded.\n");
                 }
                 
             fclose(input);
-            //return 0;
             break;
         
         case 'B':
         case 'b':
 
-            for(int i = 0; i < num_records; i++)
+            for(int i = 0; i < counter; i++)
             {
-              if(record[i].date[0]=='\0' || record[i].time[0]=='\0' || record[i].steps == 0)
-              {
-                  printf("Error: Bad data\n");
-              }
+              //if(record[i].date[0]=='\0' || record[i].time[0]=='\0' || record[i].steps == 0)
+              //{
+                  //printf("Error: Bad data\n");
+              //}
             }
             printf("Number of records in file: %d\n", counter);
             //return 0;
@@ -184,33 +147,88 @@ int main() {
         case 'C':
         case 'c':
         //calculate for fewest steps
-            //int min = INT_
-            //for(int i = 0; i < num_records; i++)
-            //if min>
-            //if(record[i].date[0]=='\0' || record[i].time[0]=='\0' || record[i].steps == 0)
-            return 0;
+            if (counter > 0){
+            min = record[0].steps;
+            for (i = 1; i < counter; i++)
+            {
+                if (record[i].steps < min)
+                {
+                    min = record[i].steps;
+                    row = i;
+                }
+            }
+        //print date and time where the steps were the fewest
+        printf("Fewest steps: %s %s \n", record[row].date, record[row].time);
             break;
+        }
 
         case 'D':
         case 'd':
-            return 0;
-            break;
+        //calculate for largest steps
+            max = record[0].steps;
+            for (i = 1; i < counter; i++)
+            {
+                if (record[i].steps > max)
+                {
+                    max = record[i].steps;
+                    col = i;
+                }
+            }
+        //print date and time where the steps were the highest
+        printf("Largest steps: %s %s \n", record[col].date, record[col].time);
+
+        break;
 
         case 'E':
         case 'e':
+        //calculate mean for steps
             mean = 0;
             for (int i = 0; i < counter; i++)
             {
                 mean += record[i].steps;
             }
             mean /= counter;
-            printf("Mean step count: %f\n", mean);
-            //change float to decimal
+            printf("Mean step count: %.0f\n", mean);
             break;
 
         case 'F':
         case 'f':
-            return 0;
+            first = -1;
+            longestStart = -1;
+            maxLength = 0;
+            currentLength = 0;
+
+            for (i = 0; i < counter; i++) {
+                if (record[i].steps > 500) {
+                    if (first == -1) {
+                        first = i;
+                    }
+                    currentLength++;
+                } else {
+                    if (currentLength > maxLength) {
+                        maxLength = currentLength;
+                        longestStart = first;
+                    }
+                    first = -1;
+                    currentLength = 0;
+                }
+            }
+
+                // Check for the last period in case it extends to the end of the array
+            if (currentLength > maxLength) {
+                maxLength = currentLength;
+                longestStart = first;
+            }
+
+            if (maxLength > 0) {
+                // Print the start and end records of the longest continuous period
+                printf("Longest period start: %s %s\n", record[longestStart].date, record[longestStart].time);
+                printf("Longest period end: %s %s\n", record[longestStart + maxLength - 1].date,
+                        record[longestStart + maxLength - 1].time);
+            } else {
+                printf("No continuous period above 500 steps found.\n");
+            }
+            //return 0;
             break;
 
         case 'Q':
@@ -225,3 +243,4 @@ int main() {
         }
     }
 }
+
